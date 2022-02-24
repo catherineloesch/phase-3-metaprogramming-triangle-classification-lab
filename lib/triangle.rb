@@ -1,34 +1,29 @@
 class Triangle
 
-  attr_accessor :sides, :a, :b, :c
+  attr_accessor :sides
 
   def initialize(a, b, c)
     @sides = [a, b, c]
-    @a = a
-    @b = b
-    @c = c
-
-  end
-
-  def kind
-    if !self.valid_triangle? 
-      raise TriangleError 
-    elsif self.sides.uniq.length == 1
-        :equilateral
-    elsif self.sides.uniq.length == 2
-        :isosceles
-    else
-        :scalene
-    end
   end
 
   def valid_triangle?
-    if self.sides.filter {|side| side > 0 }.length != 3
-      false
-    elsif !(a + b > c && a + c > b && b + c > a)
-      false
+    c1 = @sides.map {|side | side > 0}.all?
+    c2 = @sides[0] + @sides[1] > @sides[2]
+    c3 = @sides[1] + @sides[2] > @sides[0]
+    c4 = @sides[0] + @sides[2] > @sides[1]
+
+    [c1, c2, c3, c4].all?
+  end
+
+  def kind
+    if !valid_triangle?
+      raise TriangleError
+    elsif @sides.uniq.length == 1
+      :equilateral
+    elsif @sides.uniq.length == 2
+      :isosceles
     else
-      true
+      :scalene
     end
   end
 
